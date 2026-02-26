@@ -3,6 +3,7 @@ pygame.init()
 WIDTH = 864
 LENGTH = 600
 run = True
+score = 0
 bin = pygame.image.load(r"Pygame Developer\Images\bin.png")
 bin = pygame.transform.scale(bin, (50, 70))
 box = pygame.image.load(r"Pygame Developer\Images\box.png")
@@ -59,7 +60,33 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                bin_sprite.rect.y = bin_sprite.rect.y - 1
+            if event.key == pygame.K_DOWN:
+                bin_sprite.rect.y = bin_sprite.rect.y + 1
+            if event.key == pygame.K_LEFT:
+                bin_sprite.rect.x = bin_sprite.rect.x - 1
+            if event.key == pygame.K_RIGHT:
+                bin_sprite.rect.x = bin_sprite.rect.x + 1
+    Kb = pygame.key.get_pressed()
+    if Kb[pygame.K_UP]:
+        bin_sprite.rect.y = bin_sprite.rect.y - 1
+    if Kb[pygame.K_DOWN]:
+        bin_sprite.rect.y = bin_sprite.rect.y + 1
+    if Kb[pygame.K_LEFT]:
+        bin_sprite.rect.x = bin_sprite.rect.x - 1
+    if Kb[pygame.K_RIGHT]:
+        bin_sprite.rect.x = bin_sprite.rect.x + 1
     recycle.draw(screen)
     non_recycle.draw(screen)
     bin_group.draw(screen)
+    if pygame.sprite.groupcollide(bin_group, recycle, False, True):
+        score = score + 1
+    if pygame.sprite.groupcollide(bin_group, non_recycle, False, True):
+        score = score - 1
+    
+    font1 = pygame.font.SysFont("Comic Sans MC", 45)
+    message1 = font1.render(("Score = " + str(score)), True, "white")
+    screen.blit(message1, (10, 25))
     pygame.display.update()
